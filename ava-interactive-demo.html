@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ava — Live Demo | CodeCatalyst</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Geist:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0F14; --ink-mid:#111820; --slate:#1C2630; --slate-mid:#253040;
+  --teal:#00BFA5; --teal-dim:rgba(0,191,165,0.1); --teal-border:rgba(0,191,165,0.2);
+  --teal-light:#4DB8AB; --cream:#F5F0E8; --silver:#94A3B8; --silver-mid:#64748B;
+  --gold:#C9A84C; --gold-dim:rgba(201,168,76,0.1); --green:#22C55E;
+  --green-dim:rgba(34,197,94,0.1); --rule:rgba(255,255,255,0.06);
+  --stripe:#635BFF; --stripe-dim:rgba(99,91,255,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Geist',sans-serif;
+  background:var(--ink);
+  color:var(--cream);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* ── HEADER ── */
+header{
+  padding:20px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--rule);
+  position:relative;z-index:10;
+}
+.hdr-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.hdr-mark{
+  width:32px;height:32px;border-radius:9px;
+  background:var(--ink-mid);border:1px solid rgba(255,255,255,0.08);
+  display:flex;align-items:center;justify-content:center;
+}
+.hdr-name{
+  font-family:'Geist',sans-serif;font-size:14px;font-weight:400;color:var(--cream);
+}
+.hdr-name span{color:var(--teal);}
+.hdr-sep{width:1px;height:18px;background:var(--rule);}
+.hdr-product{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;color:var(--cream);letter-spacing:0.01em;
+}
+.hdr-right{display:flex;align-items:center;gap:12px;}
+.demo-badge{
+  padding:4px 12px;border-radius:100px;
+  background:var(--teal-dim);border:1px solid var(--teal-border);
+  font-size:11px;font-weight:400;color:var(--teal);letter-spacing:0.08em;
+}
+.live-dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--teal);box-shadow:0 0 8px var(--teal);
+  margin-right:6px;animation:livePulse 2s infinite;
+}
+@keyframes livePulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+/* ── MAIN LAYOUT ── */
+.demo-wrap{
+  max-width:1100px;margin:0 auto;
+  padding:48px;
+  display:grid;
+  grid-template-columns:380px 1fr;
+  gap:40px;
+  align-items:start;
+  position:relative;z-index:1;
+}
+
+/* ── SCENARIO PICKER ── */
+.picker-section{}
+.picker-label{
+  font-size:10px;font-weight:400;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--teal);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.picker-label::before{content:'';width:16px;height:1px;background:var(--teal);}
+.picker-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:400;color:var(--cream);
+  margin-bottom:8px;line-height:1.15;letter-spacing:-0.01em;
+}
+.picker-title em{font-style:italic;color:var(--teal);}
+.picker-sub{
+  font-size:13px;font-weight:300;color:var(--silver-mid);
+  line-height:1.7;margin-bottom:28px;
+}
+
+.scenario-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.scenario{
+  padding:16px 18px;
+  background:var(--ink-mid);
+  border:1px solid var(--rule);
+  border-radius:12px;
+  cursor:pointer;
+  transition:all 0.2s;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.scenario:hover{border-color:var(--teal-border);background:var(--teal-dim);}
+.scenario.selected{
+  border-color:var(--teal);
+  background:var(--teal-dim);
+  box-shadow:0 0 0 1px var(--teal-border);
+}
+.scenario-icon{
+  width:36px;height:36px;border-radius:9px;
+  background:var(--slate);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  transition:background 0.2s;
+}
+.scenario.selected .scenario-icon{background:rgba(0,191,165,0.15);}
+.scenario-body{flex:1;}
+.scenario-title{font-size:13px;font-weight:500;color:var(--cream);margin-bottom:2px;}
+.scenario-desc{font-size:11px;font-weight:300;color:var(--silver-mid);line-height:1.5;}
+.scenario-tag{
+  display:inline-block;margin-top:6px;
+  padding:2px 8px;border-radius:100px;
+  font-size:10px;font-weight:400;letter-spacing:0.06em;
+  background:var(--teal-dim);border:1px solid var(--teal-border);color:var(--teal);
+}
+
+.caller-form{
+  background:var(--ink-mid);
+  border:1px solid var(--rule);
+  border-radius:14px;padding:20px;
+  margin-bottom:16px;
+}
+.caller-form-title{
+  font-size:11px;font-weight:400;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--silver-mid);margin-bottom:14px;
+}
+.form-row{display:flex;gap:10px;margin-bottom:10px;}
+.form-group{flex:1;}
+.form-group:last-child{margin-bottom:0;}
+.form-label{
+  font-size:10px;font-weight:300;color:var(--silver-mid);
+  letter-spacing:0.06em;margin-bottom:4px;
+}
+.form-input{
+  width:100%;padding:8px 12px;
+  background:var(--slate);border:1px solid rgba(255,255,255,0.07);
+  border-radius:8px;font-family:'Geist',sans-serif;
+  font-size:13px;color:var(--cream);outline:none;
+  transition:border-color 0.2s;
+}
+.form-input:focus{border-color:var(--teal-border);}
+.form-select{
+  width:100%;padding:8px 12px;
+  background:var(--slate);border:1px solid rgba(255,255,255,0.07);
+  border-radius:8px;font-family:'Geist',sans-serif;
+  font-size:13px;color:var(--cream);outline:none;
+}
+
+.call-btn{
+  width:100%;padding:14px;
+  background:var(--teal);border:none;border-radius:10px;
+  font-family:'Geist',sans-serif;
+  font-size:14px;font-weight:500;color:var(--ink);
+  letter-spacing:0.04em;cursor:pointer;
+  transition:all 0.25s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 20px rgba(0,191,165,0.25);
+}
+.call-btn:hover{background:var(--teal-light);box-shadow:0 4px 32px rgba(0,191,165,0.4);transform:translateY(-1px);}
+.call-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.call-btn-icon{font-size:18px;}
+
+/* ── PHONE ── */
+.phone-section{
+  display:flex;flex-direction:column;
+  align-items:center;gap:20px;
+}
+
+.phone-wrap{position:relative;}
+
+.phone{
+  width:300px;
+  background:var(--ink-mid);
+  border-radius:44px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,0.09);
+  box-shadow:
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(0,191,165,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  position:relative;z-index:1;
+  transition:box-shadow 0.5s;
+}
+.phone.calling{
+  box-shadow:
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(0,191,165,0.3),
+    0 0 40px rgba(0,191,165,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.phone-notch{
+  width:80px;height:5px;border-radius:3px;
+  background:var(--ink);margin:0 auto 14px;
+}
+.phone-screen{
+  background:var(--ink);
+  border-radius:32px;
+  padding:20px 16px;
+  min-height:500px;
+  display:flex;flex-direction:column;
+}
+
+/* Phone status bar */
+.phone-status{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.phone-time{font-size:12px;font-weight:400;color:var(--silver-mid);}
+.phone-icons{display:flex;gap:5px;}
+.phone-icon{width:14px;height:8px;border-radius:2px;background:rgba(255,255,255,0.25);}
+
+/* Idle state */
+.screen-idle{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;gap:12px;
+}
+.idle-icon{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--slate);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  box-shadow:0 0 0 8px rgba(255,255,255,0.03);
+}
+.idle-text{font-size:13px;font-weight:300;color:var(--silver-mid);line-height:1.6;}
+
+/* Ringing state */
+.screen-ringing{
+  flex:1;display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+}
+.ring-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),var(--teal-light));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;font-weight:400;color:var(--ink);
+  margin:0 auto 14px;
+  position:relative;
+}
+.ring-avatar::before{
+  content:'';position:absolute;inset:-10px;
+  border-radius:50%;border:1px solid rgba(0,191,165,0.3);
+  animation:ringExpand 1.5s ease-out infinite;
+}
+.ring-avatar::after{
+  content:'';position:absolute;inset:-20px;
+  border-radius:50%;border:1px solid rgba(0,191,165,0.15);
+  animation:ringExpand 1.5s ease-out infinite 0.4s;
+}
+@keyframes ringExpand{
+  0%{transform:scale(0.95);opacity:0.7;}
+  100%{transform:scale(1.2);opacity:0;}
+}
+.ring-name{font-size:20px;font-weight:400;color:var(--cream);margin-bottom:4px;}
+.ring-status{font-size:12px;font-weight:300;color:var(--teal);letter-spacing:0.08em;text-transform:uppercase;}
+
+/* Active call */
+.screen-active{
+  flex:1;display:none;flex-direction:column;
+}
+.call-header{
+  text-align:center;padding-bottom:14px;
+  border-bottom:1px solid var(--rule);margin-bottom:14px;
+}
+.call-avatar{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),var(--teal-light));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;color:var(--ink);font-weight:500;
+  margin:0 auto 8px;
+  animation:callPulse 3s ease-in-out infinite;
+}
+@keyframes callPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(0,191,165,0.3);}
+  50%{box-shadow:0 0 0 10px rgba(0,191,165,0);}
+}
+.call-name{font-size:16px;font-weight:400;color:var(--cream);margin-bottom:2px;}
+.call-timer{font-size:11px;font-weight:300;color:var(--teal);letter-spacing:0.06em;}
+
+/* Transcript */
+.transcript{
+  flex:1;overflow-y:auto;
+  display:flex;flex-direction:column;gap:10px;
+  padding-right:4px;
+  scroll-behavior:smooth;
+}
+.transcript::-webkit-scrollbar{width:3px;}
+.transcript::-webkit-scrollbar-track{background:transparent;}
+.transcript::-webkit-scrollbar-thumb{background:var(--slate-mid);border-radius:2px;}
+
+.msg{display:flex;gap:8px;align-items:flex-end;}
+.msg-ava{flex-direction:row;}
+.msg-patient{flex-direction:row-reverse;}
+
+.msg-avatar{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:8px;font-weight:600;
+}
+.msg-avatar.ava{background:linear-gradient(135deg,var(--teal),var(--teal-light));color:var(--ink);}
+.msg-avatar.patient{background:var(--slate-mid);color:var(--silver);}
+
+.bubble{
+  max-width:82%;
+  padding:9px 12px;
+  font-size:12px;font-weight:300;line-height:1.55;
+  border-radius:4px;
+}
+.bubble-ava{
+  background:rgba(0,191,165,0.1);
+  border:1px solid rgba(0,191,165,0.2);
+  border-radius:0 10px 10px 10px;
+  color:var(--cream);
+}
+.bubble-patient{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px 0 10px 10px;
+  color:var(--silver);
+}
+
+/* Typing indicator */
+.typing-bubble{
+  background:rgba(0,191,165,0.08);
+  border:1px solid rgba(0,191,165,0.15);
+  border-radius:0 10px 10px 10px;
+  padding:10px 14px;
+  display:inline-flex;gap:4px;align-items:center;
+}
+.typing-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--teal);opacity:0.4;
+  animation:typingBounce 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-4px);opacity:1;}}
+
+/* Call actions */
+.call-actions{
+  display:flex;justify-content:center;gap:16px;
+  padding-top:14px;margin-top:auto;
+  border-top:1px solid var(--rule);
+}
+.call-action-btn{
+  width:46px;height:46px;border-radius:50%;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;transition:all 0.2s;
+}
+.btn-end{background:#EF4444;}
+.btn-end:hover{background:#DC2626;}
+.btn-mute{background:var(--slate);}
+.btn-mute:hover{background:var(--slate-mid);}
+
+/* Screen completed */
+.screen-done{
+  flex:1;display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;gap:12px;padding:10px;
+}
+.done-check{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(0,191,165,0.15);
+  border:2px solid var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  box-shadow:0 0 24px rgba(0,191,165,0.3);
+  animation:doneAppear 0.5s ease both;
+}
+@keyframes doneAppear{from{transform:scale(0.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+.done-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:400;color:var(--cream);
+}
+.done-items{
+  display:flex;flex-direction:column;gap:6px;
+  width:100%;
+}
+.done-item{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 12px;
+  background:var(--slate);border-radius:8px;
+  font-size:11px;font-weight:300;color:var(--silver);
+  text-align:left;
+}
+.done-item-icon{font-size:13px;flex-shrink:0;}
+.done-item strong{color:var(--cream);font-weight:400;}
+
+/* ── RIGHT PANEL — Live Feed ── */
+.live-feed{
+  position:sticky;top:24px;
+}
+.feed-label{
+  font-size:10px;font-weight:400;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--teal);
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.feed-label::before{content:'';width:16px;height:1px;background:var(--teal);}
+
+/* Semble card */
+.semble-card{
+  background:var(--ink-mid);
+  border:1px solid var(--rule);
+  border-radius:14px;overflow:hidden;
+  margin-bottom:14px;
+  transition:border-color 0.4s;
+}
+.semble-card.active{border-color:var(--teal-border);}
+.semble-card-header{
+  padding:12px 18px;
+  background:rgba(255,255,255,0.02);
+  border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;gap:10px;
+}
+.semble-header-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--silver-mid);
+  transition:background 0.3s,box-shadow 0.3s;
+}
+.semble-card.active .semble-header-dot{
+  background:var(--teal);
+  box-shadow:0 0 8px var(--teal);
+  animation:livePulse 2s infinite;
+}
+.semble-header-text{font-size:12px;font-weight:400;color:var(--silver);letter-spacing:0.04em;}
+.semble-status-text{margin-left:auto;font-size:10px;color:var(--silver-mid);letter-spacing:0.06em;}
+.semble-card.active .semble-status-text{color:var(--teal);}
+.semble-card-body{padding:16px 18px;}
+
+.semble-field{margin-bottom:10px;}
+.semble-field:last-child{margin-bottom:0;}
+.semble-field-label{
+  font-size:9px;font-weight:400;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--silver-mid);margin-bottom:4px;
+}
+.semble-field-val{
+  font-size:13px;font-weight:300;color:var(--silver);
+  padding:7px 10px;
+  background:var(--slate);border:1px solid rgba(255,255,255,0.05);
+  border-radius:7px;min-height:30px;
+  transition:all 0.4s;
+}
+.semble-field-val.filled{
+  color:var(--cream);
+  border-color:var(--teal-border);
+  background:rgba(0,191,165,0.06);
+}
+.semble-field-val.booking{
+  color:var(--teal);
+  border-color:var(--teal);
+  background:rgba(0,191,165,0.1);
+  font-weight:400;
+}
+
+/* Stripe card */
+.stripe-card{
+  background:var(--ink-mid);
+  border:1px solid var(--rule);
+  border-radius:14px;overflow:hidden;
+  margin-bottom:14px;
+  transition:border-color 0.4s;
+}
+.stripe-card.active{border-color:rgba(99,91,255,0.4);}
+.stripe-card-header{
+  padding:12px 18px;
+  background:rgba(255,255,255,0.02);
+  border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;gap:10px;
+}
+.stripe-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--silver-mid);
+  transition:all 0.3s;
+}
+.stripe-card.active .stripe-dot{background:var(--stripe);box-shadow:0 0 8px var(--stripe);}
+.stripe-header-text{font-size:12px;font-weight:400;color:var(--silver);letter-spacing:0.04em;}
+.stripe-status{margin-left:auto;font-size:10px;color:var(--silver-mid);letter-spacing:0.06em;}
+.stripe-card.active .stripe-status{color:var(--stripe);}
+.stripe-card-body{padding:16px 18px;}
+.stripe-amount{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-weight:400;color:var(--silver-mid);
+  margin-bottom:4px;
+  transition:color 0.4s;
+}
+.stripe-card.active .stripe-amount{color:var(--cream);}
+.stripe-desc{font-size:12px;font-weight:300;color:var(--silver-mid);margin-bottom:14px;}
+.stripe-link{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;
+  background:var(--stripe-dim);border:1px solid rgba(99,91,255,0.2);
+  border-radius:8px;
+  font-size:12px;font-weight:300;color:var(--silver-mid);
+  transition:all 0.4s;
+}
+.stripe-card.active .stripe-link{
+  color:var(--cream);
+  border-color:rgba(99,91,255,0.4);
+}
+.stripe-link-icon{font-size:14px;}
+
+/* SMS preview */
+.sms-card{
+  background:var(--ink-mid);
+  border:1px solid var(--rule);
+  border-radius:14px;overflow:hidden;
+  margin-bottom:14px;
+  display:none;
+  animation:fadeUp 0.4s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.sms-card-header{
+  padding:12px 18px;
+  background:rgba(34,197,94,0.06);
+  border-bottom:1px solid rgba(34,197,94,0.15);
+  display:flex;align-items:center;gap:8px;
+}
+.sms-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
+.sms-header-text{font-size:12px;font-weight:400;color:var(--green);letter-spacing:0.04em;}
+.sms-time{margin-left:auto;font-size:10px;color:var(--silver-mid);}
+.sms-body{padding:14px 18px;font-size:12px;font-weight:300;color:var(--silver);line-height:1.7;}
+.sms-body strong{color:var(--cream);font-weight:400;}
+
+/* Event log */
+.event-log{
+  background:var(--ink-mid);
+  border:1px solid var(--rule);
+  border-radius:14px;padding:16px 18px;
+}
+.event-log-title{
+  font-size:10px;font-weight:400;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--silver-mid);
+  margin-bottom:12px;
+}
+.event-list{display:flex;flex-direction:column;gap:8px;}
+.event-item{
+  display:flex;align-items:center;gap:10px;
+  opacity:0.3;transition:opacity 0.4s;
+}
+.event-item.fired{opacity:1;}
+.event-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--silver-mid);flex-shrink:0;
+  transition:background 0.4s;
+}
+.event-item.fired .event-dot{background:var(--teal);}
+.event-text{font-size:12px;font-weight:300;color:var(--silver-mid);}
+.event-item.fired .event-text{color:var(--cream);}
+.event-time{margin-left:auto;font-size:10px;color:var(--teal);opacity:0;transition:opacity 0.4s;}
+.event-item.fired .event-time{opacity:1;}
+
+/* Reset btn */
+.reset-btn{
+  width:100%;padding:10px;margin-top:10px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px;
+  font-family:'Geist',sans-serif;
+  font-size:12px;font-weight:300;color:var(--silver-mid);
+  cursor:pointer;transition:all 0.2s;
+  display:none;
+}
+.reset-btn:hover{border-color:rgba(255,255,255,0.18);color:var(--cream);}
+
+/* Responsive */
+@media(max-width:900px){
+  header{padding:16px 20px;}
+  .demo-wrap{grid-template-columns:1fr;padding:24px 20px;gap:28px;}
+  .live-feed{position:static;}
+  .phone{width:100%;max-width:340px;}
+  .phone-section{align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="https://codecatalyst.uk" class="hdr-logo">
+    <div class="hdr-mark">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 2C4.7 2 2 4.7 2 8C2 11.3 4.7 14 8 14C9.8 14 11.4 13.2 12.5 12" stroke="#00BFA5" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <circle cx="13" cy="3.5" r="1.8" fill="#00BFA5"/>
+        <path d="M6 8L7.5 9.5L10.5 6.5" stroke="#00BFA5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="hdr-name">Code<span>Catalyst</span></span>
+  </a>
+  <div class="hdr-sep"></div>
+  <span class="hdr-product">Ava</span>
+  <div class="hdr-right">
+    <span class="demo-badge"><span class="live-dot"></span>Interactive Demo</span>
+  </div>
+</header>
+
+<div class="demo-wrap">
+
+  <!-- LEFT — Scenario picker + phone -->
+  <div>
+    <div class="picker-section">
+      <div class="picker-label">Choose a scenario</div>
+      <h1 class="picker-title">See Ava in <em>action.</em></h1>
+      <p class="picker-sub">Select a call type, enter a patient name, and watch Ava handle the entire call — booking into Semble, collecting payment via Stripe, all in real time.</p>
+
+      <div class="scenario-list">
+        <div class="scenario selected" id="s1" onclick="selectScenario(1)">
+          <div class="scenario-icon">📅</div>
+          <div class="scenario-body">
+            <div class="scenario-title">New patient booking</div>
+            <div class="scenario-desc">Patient calls to book a first consultation. Ava checks availability and books directly into Semble.</div>
+            <span class="scenario-tag">Semble + Stripe</span>
+          </div>
+        </div>
+        <div class="scenario" id="s2" onclick="selectScenario(2)">
+          <div class="scenario-icon">🔄</div>
+          <div class="scenario-body">
+            <div class="scenario-title">Returning patient</div>
+            <div class="scenario-desc">Ava recognises the caller by phone number from Semble records and personalises the call.</div>
+            <span class="scenario-tag">Patient recognition</span>
+          </div>
+        </div>
+        <div class="scenario" id="s3" onclick="selectScenario(3)">
+          <div class="scenario-icon">🌍</div>
+          <div class="scenario-body">
+            <div class="scenario-title">Arabic-speaking patient</div>
+            <div class="scenario-desc">Ava detects Arabic and switches language automatically. Books appointment in Semble.</div>
+            <span class="scenario-tag">Multilingual</span>
+          </div>
+        </div>
+        <div class="scenario" id="s4" onclick="selectScenario(4)">
+          <div class="scenario-icon">🛡️</div>
+          <div class="scenario-body">
+            <div class="scenario-title">Complaint escalation</div>
+            <div class="scenario-desc">Patient raises a concern. Ava escalates to The Bridge automatically with details pre-filled.</div>
+            <span class="scenario-tag">Bridge connected</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="caller-form">
+        <div class="caller-form-title">Caller details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <div class="form-label">Patient name</div>
+            <input class="form-input" id="patient-name" value="Sarah Mitchell" placeholder="Patient name"/>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Doctor</div>
+            <select class="form-select" id="doctor-select">
+              <option>Dr Chopra</option>
+              <option>Dr Patel</option>
+              <option>Dr Khalique</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Concern</div>
+          <select class="form-select" id="concern-select">
+            <option>Acne / skin concern</option>
+            <option>Eczema / dry skin</option>
+            <option>Mole check</option>
+            <option>Rosacea / redness</option>
+            <option>Hair loss</option>
+            <option>General consultation</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="call-btn" id="call-btn" onclick="startCall()">
+        <span class="call-btn-icon">📞</span> Start Call Demo
+      </button>
+      <button class="reset-btn" id="reset-btn" onclick="resetDemo()">↺ Reset — Try another scenario</button>
+    </div>
+
+    <!-- Phone -->
+    <div class="phone-section" style="margin-top:32px;">
+      <div class="phone-wrap">
+        <div class="phone" id="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-status">
+              <span class="phone-time" id="phone-time">9:14 AM</span>
+              <div class="phone-icons">
+                <div class="phone-icon"></div>
+                <div class="phone-icon"></div>
+              </div>
+            </div>
+
+            <!-- Idle -->
+            <div class="screen-idle" id="screen-idle">
+              <div class="idle-icon">📞</div>
+              <div class="idle-text">Select a scenario above<br>and press <strong style="color:var(--teal)">Start Call Demo</strong></div>
+            </div>
+
+            <!-- Ringing -->
+            <div class="screen-ringing" id="screen-ringing">
+              <div class="ring-avatar">A</div>
+              <div class="ring-name">Ava</div>
+              <div class="ring-status">Connecting…</div>
+            </div>
+
+            <!-- Active -->
+            <div class="screen-active" id="screen-active">
+              <div class="call-header">
+                <div class="call-avatar">A</div>
+                <div class="call-name">Ava</div>
+                <div class="call-timer" id="call-timer">Active call · 00:00</div>
+              </div>
+              <div class="transcript" id="transcript"></div>
+              <div class="call-actions">
+                <button class="call-action-btn btn-mute">🔇</button>
+                <button class="call-action-btn btn-end" onclick="endCall()">📵</button>
+              </div>
+            </div>
+
+            <!-- Done -->
+            <div class="screen-done" id="screen-done">
+              <div class="done-check">✓</div>
+              <div class="done-title">Call complete</div>
+              <div class="done-items" id="done-items"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT — Live feed -->
+  <div class="live-feed">
+    <div class="feed-label">Live system activity</div>
+
+    <!-- Semble -->
+    <div class="semble-card" id="semble-card">
+      <div class="semble-card-header">
+        <div class="semble-header-dot"></div>
+        <span class="semble-header-text">Semble — Practice Management</span>
+        <span class="semble-status-text" id="semble-status">Standby</span>
+      </div>
+      <div class="semble-card-body">
+        <div class="semble-field">
+          <div class="semble-field-label">Patient</div>
+          <div class="semble-field-val" id="sf-patient">—</div>
+        </div>
+        <div class="semble-field">
+          <div class="semble-field-label">Clinician</div>
+          <div class="semble-field-val" id="sf-doctor">—</div>
+        </div>
+        <div class="semble-field">
+          <div class="semble-field-label">Availability checked</div>
+          <div class="semble-field-val" id="sf-avail">—</div>
+        </div>
+        <div class="semble-field">
+          <div class="semble-field-label">Appointment</div>
+          <div class="semble-field-val" id="sf-booking">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stripe -->
+    <div class="stripe-card" id="stripe-card">
+      <div class="stripe-card-header">
+        <div class="stripe-dot"></div>
+        <span class="stripe-header-text">Stripe — Payment Collection</span>
+        <span class="stripe-status" id="stripe-status">Standby</span>
+      </div>
+      <div class="stripe-card-body">
+        <div class="stripe-amount" id="stripe-amount">£0.00</div>
+        <div class="stripe-desc" id="stripe-desc">Awaiting booking confirmation</div>
+        <div class="stripe-link" id="stripe-link">
+          <span class="stripe-link-icon">🔗</span>
+          <span id="stripe-link-text">Payment link will appear here</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SMS -->
+    <div class="sms-card" id="sms-card">
+      <div class="sms-card-header">
+        <div class="sms-dot"></div>
+        <span class="sms-header-text">SMS sent to patient</span>
+        <span class="sms-time">Just now</span>
+      </div>
+      <div class="sms-body" id="sms-body"></div>
+    </div>
+
+    <!-- Event log -->
+    <div class="event-log">
+      <div class="event-log-title">Activity log</div>
+      <div class="event-list" id="event-list">
+        <div class="event-item" id="ev1"><div class="event-dot"></div><div class="event-text">Call received</div><div class="event-time">—</div></div>
+        <div class="event-item" id="ev2"><div class="event-dot"></div><div class="event-text">Patient identified</div><div class="event-time">—</div></div>
+        <div class="event-item" id="ev3"><div class="event-dot"></div><div class="event-text">Semble availability queried</div><div class="event-time">—</div></div>
+        <div class="event-item" id="ev4"><div class="event-dot"></div><div class="event-text">Appointment written to Semble</div><div class="event-time">—</div></div>
+        <div class="event-item" id="ev5"><div class="event-dot"></div><div class="event-text">Stripe payment link generated</div><div class="event-time">—</div></div>
+        <div class="event-item" id="ev6"><div class="event-dot"></div><div class="event-text">SMS sent to patient</div><div class="event-time">—</div></div>
+        <div class="event-item" id="ev7"><div class="event-dot"></div><div class="event-text">Call transcript logged to Semble</div><div class="event-time">—</div></div>
+      </div>
+    </div>
+
+    <button class="reset-btn" id="reset-btn2" onclick="resetDemo()">↺ Reset — Try another scenario</button>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────
+let selectedScenario = 1;
+let callTimer = null;
+let callSeconds = 0;
+let isRunning = false;
+
+// Update clock
+function updateClock(){
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('phone-time').textContent = `${h}:${m}`;
+}
+updateClock();
+setInterval(updateClock, 30000);
+
+// ── SCENARIOS ──────────────────────────────────────────
+const scenarios = {
+  1: {
+    label: 'New patient booking',
+    concern: null, // uses dropdown
+    conversation: [
+      {who:'ava', text:'Good morning, thank you for calling. You\'ve reached [PRACTICE]. This is Ava, your AI receptionist. How can I help you today?', delay:800},
+      {who:'patient', text:'Hi, I\'d like to book an appointment for [CONCERN] please.', delay:2200},
+      {who:'ava', text:'Of course — I\'d be happy to arrange that for you. I\'m just checking [DOCTOR]\'s availability now…', delay:4000, event:'ev1', semble:'checking'},
+      {who:'ava', text:'I can see [DOCTOR] has availability this Thursday at 2:30pm and Friday at 10:00am. Which would suit you best?', delay:6500, event:'ev2', sembleAvail:true},
+      {who:'patient', text:'Thursday at 2:30 would be great, thank you.', delay:9000},
+      {who:'ava', text:'Perfect. I\'m booking that now — Thursday at 2:30pm with [DOCTOR]. One moment…', delay:11000, event:'ev3', booking:true},
+      {who:'ava', text:'Done — your appointment is confirmed. I\'m just generating your payment link now.', delay:13500, event:'ev4', stripe:true},
+      {who:'ava', text:'You\'ll receive a text message shortly with a secure payment link for your £[PRICE] consultation fee. Is there anything else I can help you with?', delay:16000, event:'ev5', sms:true},
+      {who:'patient', text:'No that\'s everything, thank you so much!', delay:18500},
+      {who:'ava', text:'You\'re very welcome. We look forward to seeing you on Thursday. Goodbye!', delay:20500, event:'ev6', end:true},
+    ]
+  },
+  2: {
+    label: 'Returning patient',
+    conversation: [
+      {who:'ava', text:'Good afternoon, thank you for calling. I can see this is [NAME] — welcome back. How can I help you today?', delay:800, event:'ev1', sembleRecognise:true},
+      {who:'patient', text:'Oh wow, you recognised me! Yes I\'d like to book a follow-up with [DOCTOR] please.', delay:3000},
+      {who:'ava', text:'Of course [NAME], great to hear from you. I\'m checking [DOCTOR]\'s schedule now…', delay:5000, event:'ev2', semble:'checking'},
+      {who:'ava', text:'[DOCTOR] has availability next Tuesday at 11:00am. Would that work for you?', delay:7500, sembleAvail:true},
+      {who:'patient', text:'Yes Tuesday\'s perfect.', delay:10000},
+      {who:'ava', text:'Excellent — booking you in now.', delay:11500, event:'ev3', booking:true},
+      {who:'ava', text:'Confirmed. I\'ve also sent a payment link to your registered mobile.', delay:13500, event:'ev4', stripe:true, sms:true, event2:'ev5'},
+      {who:'patient', text:'Thank you — very efficient!', delay:16000},
+      {who:'ava', text:'Happy to help [NAME]. See you Tuesday. Goodbye!', delay:17500, event:'ev6', end:true},
+    ]
+  },
+  3: {
+    label: 'Arabic-speaking patient',
+    conversation: [
+      {who:'ava', text:'مرحباً، شكراً لاتصالكم بعيادتنا. أنا أفا، المساعد الذكي. كيف يمكنني مساعدتكم؟', delay:800, event:'ev1'},
+      {who:'patient', text:'أهلاً، أريد حجز موعد مع الدكتور من فضلك.', delay:3000},
+      {who:'ava', text:'بالتأكيد. دعني أتحقق من المواعيد المتاحة…', delay:5000, event:'ev2', semble:'checking', sembleAvail:true},
+      {who:'ava', text:'يتوفر موعد يوم الخميس الساعة الثالثة مساءً. هل يناسبك؟', delay:7500},
+      {who:'patient', text:'نعم، هذا مناسب جداً. شكراً.', delay:10000},
+      {who:'ava', text:'تم الحجز. سيصلك رابط الدفع على هاتفك.', delay:12000, event:'ev3', booking:true, event2:'ev4', stripe:true, sms:true, event3:'ev5'},
+      {who:'patient', text:'شكراً جزيلاً!', delay:15000},
+      {who:'ava', text:'العفو. نراكم يوم الخميس. مع السلامة!', delay:17000, event:'ev6', end:true},
+    ]
+  },
+  4: {
+    label: 'Complaint escalation',
+    eventsOverride: ['ev1','ev2','—','ev4','—','ev6','ev7'],
+    conversation: [
+      {who:'ava', text:'Good morning, thank you for calling. This is Ava. How can I help you today?', delay:800, event:'ev1'},
+      {who:'patient', text:'I\'m really unhappy with my last appointment. The doctor was dismissive and I\'ve been waiting 3 weeks for my test results.', delay:2500},
+      {who:'ava', text:'I\'m very sorry to hear that [NAME] — that\'s not the experience we want for you at all. I want to make sure this is properly addressed. I\'m escalating this to our complaints team right now.', delay:5000, event:'ev2', bridge:true},
+      {who:'ava', text:'I\'ve created a formal complaint case — reference CC-2026-0089. Our practice manager will contact you within 24 hours. You\'ll also receive a confirmation email shortly.', delay:8500, event:'ev4', sms:true, event2:'ev6'},
+      {who:'patient', text:'Thank you. I\'m glad someone is taking this seriously.', delay:12000},
+      {who:'ava', text:'Absolutely. Your concern is important and we will ensure it\'s handled properly. Is there anything else I can help with today?', delay:14000},
+      {who:'patient', text:'No, that\'s all. Thank you.', delay:16500},
+      {who:'ava', text:'Thank you for letting us know [NAME]. Our team will be in touch very soon. Goodbye.', delay:18000, event:'ev7', end:true},
+    ]
+  }
+};
+
+// ── SELECT SCENARIO ────────────────────────────────────
+function selectScenario(n){
+  if(isRunning) return;
+  selectedScenario = n;
+  document.querySelectorAll('.scenario').forEach(s => s.classList.remove('selected'));
+  document.getElementById('s'+n).classList.add('selected');
+  // Update event log labels for scenario 4
+  if(n === 4){
+    document.getElementById('ev3').querySelector('.event-text').textContent = 'The Bridge case created';
+    document.getElementById('ev5').querySelector('.event-text').textContent = 'Complaint confirmation email sent';
+  } else {
+    document.getElementById('ev3').querySelector('.event-text').textContent = 'Semble availability queried';
+    document.getElementById('ev5').querySelector('.event-text').textContent = 'Stripe payment link generated';
+  }
+}
+
+// ── HELPERS ────────────────────────────────────────────
+function show(id){ document.getElementById(id).style.display = 'flex'; }
+function hide(id){ document.getElementById(id).style.display = 'none'; }
+function txt(id, val){ document.getElementById(id).textContent = val; }
+function addClass(id, cls){ document.getElementById(id).classList.add(cls); }
+
+function fireEvent(evId){
+  if(!evId) return;
+  const el = document.getElementById(evId);
+  if(!el) return;
+  el.classList.add('fired');
+  const now = new Date();
+  el.querySelector('.event-time').textContent =
+    `${now.getHours()}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+}
+
+function addMsg(who, text, name, doctor){
+  const finalText = text
+    .replace(/\[NAME\]/g, name)
+    .replace(/\[DOCTOR\]/g, doctor)
+    .replace(/\[CONCERN\]/g, document.getElementById('concern-select').value)
+    .replace(/\[PRICE\]/g, '350');
+
+  const transcript = document.getElementById('transcript');
+
+  // Add typing indicator first
+  const typing = document.createElement('div');
+  typing.className = 'msg msg-ava';
+  typing.innerHTML = `
+    <div class="msg-avatar ava">A</div>
+    <div class="typing-bubble">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>`;
+
+  if(who === 'ava'){
+    transcript.appendChild(typing);
+    transcript.scrollTop = transcript.scrollHeight;
+  }
+
+  return new Promise(resolve => {
+    const typingDuration = who === 'ava' ? Math.min(finalText.length * 18, 1800) : 0;
+    setTimeout(() => {
+      if(who === 'ava') transcript.removeChild(typing);
+      const msg = document.createElement('div');
+      msg.className = `msg msg-${who}`;
+      msg.style.opacity = '0';
+      msg.style.transform = 'translateY(6px)';
+      msg.innerHTML = `
+        <div class="msg-avatar ${who}">${who === 'ava' ? 'A' : '👤'}</div>
+        <div class="bubble bubble-${who}">${finalText}</div>`;
+      transcript.appendChild(msg);
+      transcript.scrollTop = transcript.scrollHeight;
+      requestAnimationFrame(() => {
+        msg.style.transition = 'all 0.3s ease';
+        msg.style.opacity = '1';
+        msg.style.transform = 'translateY(0)';
+      });
+      resolve();
+    }, typingDuration);
+  });
+}
+
+// ── START CALL ─────────────────────────────────────────
+async function startCall(){
+  if(isRunning) return;
+  isRunning = true;
+
+  const name   = document.getElementById('patient-name').value.trim() || 'the patient';
+  const doctor = document.getElementById('doctor-select').value;
+  const price  = '350';
+
+  document.getElementById('call-btn').disabled = true;
+  document.getElementById('reset-btn').style.display = 'none';
+  document.getElementById('reset-btn2').style.display = 'none';
+
+  // Show ringing
+  hide('screen-idle');
+  show('screen-ringing');
+  document.getElementById('phone').classList.add('calling');
+
+  await sleep(2000);
+
+  // Show active call
+  hide('screen-ringing');
+  document.getElementById('screen-active').style.display = 'flex';
+
+  // Start timer
+  callSeconds = 0;
+  callTimer = setInterval(() => {
+    callSeconds++;
+    const m = Math.floor(callSeconds/60).toString().padStart(2,'0');
+    const s = (callSeconds%60).toString().padStart(2,'0');
+    txt('call-timer', `Active call · ${m}:${s}`);
+  }, 1000);
+
+  // Run scenario
+  const sc = scenarios[selectedScenario];
+  let sembleActive = false;
+
+  for(const step of sc.conversation){
+    await sleep(step.delay - (sc.conversation[0].delay));
+
+    // Handle Semble state
+    if(step.semble === 'checking' || step.sembleAvail || step.sembleRecognise || step.booking){
+      if(!sembleActive){
+        sembleActive = true;
+        addClass('semble-card', 'active');
+        txt('semble-status', 'Connected');
+        txt('sf-patient', name);
+        txt('sf-doctor', doctor);
+        addClass('sf-patient', 'filled');
+        addClass('sf-doctor', 'filled');
+      }
+    }
+    if(step.sembleAvail || step.sembleRecognise){
+      txt('sf-avail', 'Thursday 2:30pm · Tuesday 11:00am');
+      addClass('sf-avail', 'filled');
+    }
+    if(step.sembleRecognise){
+      txt('sf-patient', name + ' · Returning patient · 4 visits');
+      txt('sf-avail', 'Recognised by phone number');
+    }
+    if(step.booking){
+      txt('sf-booking', 'Confirmed — Thursday 2:30pm');
+      addClass('sf-booking', 'booking');
+    }
+
+    // Handle Stripe
+    if(step.stripe){
+      addClass('stripe-card', 'active');
+      txt('stripe-status', 'Active');
+      txt('stripe-amount', '£350.00');
+      txt('stripe-desc', `Consultation — ${doctor}`);
+      txt('stripe-link-text', 'buy.stripe.com/ldc-' + Math.random().toString(36).substr(2,8));
+    }
+
+    // Handle SMS
+    if(step.sms && selectedScenario !== 4){
+      document.getElementById('sms-card').style.display = 'block';
+      document.getElementById('sms-body').innerHTML =
+        `<strong>Appointment confirmed</strong><br>
+        ${doctor} · Thursday at 2:30pm<br><br>
+        Secure payment link:<br>
+        <strong>pay.stripe.com/ldc-confirm</strong><br><br>
+        Amount: <strong>£350.00</strong>`;
+    }
+    if(step.sms && selectedScenario === 4){
+      document.getElementById('sms-card').style.display = 'block';
+      document.getElementById('sms-body').innerHTML =
+        `<strong>Complaint received</strong><br>
+        Reference: CC-2026-0089<br><br>
+        Our practice manager will contact you within 24 hours.<br><br>
+        <strong>London Dermatology Centre</strong>`;
+    }
+
+    // Bridge escalation
+    if(step.bridge){
+      addClass('semble-card', 'active');
+      txt('semble-status', 'Bridge alert');
+      txt('sf-patient', name);
+      addClass('sf-patient', 'filled');
+      txt('sf-doctor', 'Practice Manager notified');
+      addClass('sf-doctor', 'filled');
+      txt('sf-avail', 'Case CC-2026-0089 created');
+      addClass('sf-avail', 'filled');
+      txt('sf-booking', 'CQC complaint — escalated');
+      addClass('sf-booking', 'filled');
+    }
+
+    // Fire events
+    if(step.event) fireEvent(step.event);
+    if(step.event2) fireEvent(step.event2);
+    if(step.event3) fireEvent(step.event3);
+
+    await addMsg(step.who, step.text, name, doctor);
+
+    if(step.end){
+      await sleep(1000);
+      endCall(name, doctor);
+      break;
+    }
+  }
+}
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+// ── END CALL ───────────────────────────────────────────
+async function endCall(name, doctor){
+  clearInterval(callTimer);
+  document.getElementById('phone').classList.remove('calling');
+
+  if(!name) name = document.getElementById('patient-name').value.trim() || 'Patient';
+  if(!doctor) doctor = document.getElementById('doctor-select').value;
+
+  document.getElementById('screen-active').style.display = 'none';
+  document.getElementById('screen-done').style.display = 'flex';
+
+  // Fire last event
+  fireEvent('ev7');
+
+  // Build done items
+  const items = selectedScenario === 4 ? [
+    {icon:'🛡️', text:`Complaint logged — <strong>Case CC-2026-0089</strong>`},
+    {icon:'📱', text:`SMS confirmation sent to ${name}`},
+    {icon:'📧', text:`Practice manager alerted immediately`},
+    {icon:'📋', text:`Case added to The Bridge dashboard`},
+  ] : [
+    {icon:'📅', text:`Appointment confirmed — <strong>Thursday 2:30pm</strong>`},
+    {icon:'💳', text:`Stripe payment link sent — <strong>£350.00</strong>`},
+    {icon:'📱', text:`SMS confirmation sent to ${name}`},
+    {icon:'🗂️', text:`Booking written to <strong>Semble</strong>`},
+    {icon:'📝', text:`Transcript logged to patient record`},
+  ];
+
+  const container = document.getElementById('done-items');
+  container.innerHTML = '';
+  items.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'done-item';
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(-8px)';
+    el.innerHTML = `<span class="done-item-icon">${item.icon}</span><span>${item.text}</span>`;
+    container.appendChild(el);
+    setTimeout(() => {
+      el.style.transition = 'all 0.35s ease';
+      el.style.opacity = '1';
+      el.style.transform = 'translateX(0)';
+    }, i * 150 + 300);
+  });
+
+  document.getElementById('reset-btn').style.display = 'block';
+  document.getElementById('reset-btn2').style.display = 'block';
+}
+
+// ── RESET ──────────────────────────────────────────────
+function resetDemo(){
+  isRunning = false;
+  clearInterval(callTimer);
+
+  // Reset phone screens
+  document.getElementById('screen-idle').style.display = 'flex';
+  hide('screen-ringing');
+  document.getElementById('screen-active').style.display = 'none';
+  document.getElementById('screen-done').style.display = 'none';
+  document.getElementById('transcript').innerHTML = '';
+  txt('call-timer', 'Active call · 00:00');
+  document.getElementById('phone').classList.remove('calling');
+
+  // Reset Semble
+  document.getElementById('semble-card').classList.remove('active');
+  txt('semble-status', 'Standby');
+  ['sf-patient','sf-doctor','sf-avail','sf-booking'].forEach(id => {
+    txt(id, '—');
+    document.getElementById(id).classList.remove('filled','booking');
+  });
+
+  // Reset Stripe
+  document.getElementById('stripe-card').classList.remove('active');
+  txt('stripe-status', 'Standby');
+  txt('stripe-amount', '£0.00');
+  txt('stripe-desc', 'Awaiting booking confirmation');
+  txt('stripe-link-text', 'Payment link will appear here');
+
+  // Reset SMS
+  document.getElementById('sms-card').style.display = 'none';
+
+  // Reset events
+  ['ev1','ev2','ev3','ev4','ev5','ev6','ev7'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('fired');
+    el.querySelector('.event-time').textContent = '—';
+  });
+
+  // Reset event labels
+  document.getElementById('ev3').querySelector('.event-text').textContent = 'Semble availability queried';
+  document.getElementById('ev5').querySelector('.event-text').textContent = 'Stripe payment link generated';
+
+  // Reset buttons
+  document.getElementById('call-btn').disabled = false;
+  document.getElementById('reset-btn').style.display = 'none';
+  document.getElementById('reset-btn2').style.display = 'none';
+
+  // Reset patient name field
+  document.getElementById('patient-name').value = 'Sarah Mitchell';
+}
+</script>
+</body>
+</html>
