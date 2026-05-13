@@ -532,6 +532,7 @@
 
   /* ── CAPABILITIES ── */
   .capabilities-grid {
+    grid-template-columns:repeat(3,1fr);
     display:grid; grid-template-columns:repeat(2,1fr);
     gap:20px; margin-top:60px;
   }
@@ -1109,7 +1110,7 @@
     <div class="hero-left">
       <div class="hero-badge fade-in">
         <div class="hero-badge-dot"></div>
-        <span class="hero-badge-text">Coming soon to Harley Street</span>
+        <span class="hero-badge-text">In discussion with Harley Street practices</span>
       </div>
 
       <h1 class="hero-h1 fade-in delay-1">
@@ -1136,7 +1137,7 @@
           <div class="trust-avatar">+</div>
         </div>
         <div class="trust-text">
-          <strong>Trusted by leading Harley Street practices.</strong><br>
+          <strong>In discussion with leading Harley Street practices.</strong><br>
           Built for UK private healthcare.
         </div>
       </div>
@@ -1481,6 +1482,13 @@
           <div class="semble-feat-sub">Transcripts saved to patient record automatically</div>
         </div>
       </div>
+      <div class="semble-feat">
+        <div class="semble-feat-icon">💳</div>
+        <div>
+          <div class="semble-feat-text">Stripe payment collection</div>
+          <div class="semble-feat-sub">Payment link sent by SMS the moment booking is confirmed</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1515,6 +1523,12 @@
         <div class="cap-title">Call dashboard</div>
         <div class="cap-desc">Every call logged, transcribed, and categorised. Review call history, monitor performance, and identify patterns — all from a single dashboard.</div>
         <span class="cap-tag">Full audit trail</span>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">💳</div>
+        <div class="cap-title">Stripe payment collection</div>
+        <div class="cap-desc">The moment Ava confirms a booking, a Stripe payment link is sent to the patient by SMS. They pay before they hang up. No manual invoicing, no chasing, no no-shows from patients who never paid.</div>
+        <span class="cap-tag">Zero no-shows</span>
       </div>
     </div>
   </div>
@@ -1569,37 +1583,16 @@
         <div class="comp-cell ava-col"><span class="check">✓</span> UK law</div>
         <div class="comp-cell"><span class="cross">✗</span> Varies (often EU)</div>
       </div>
+      <div class="comparison-row">
+        <div class="comp-cell feature">Integrated payment collection</div>
+        <div class="comp-cell ava-col"><span class="check">✓</span> Stripe — paid on call</div>
+        <div class="comp-cell"><span class="cross">✗</span> Not available</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<div class="quote-section">
-  <div class="quote-inner">
-    <div class="quote-card">
-      <div class="quote-mark">"</div>
-      <p class="quote-text">Ava handles our booking calls exactly as a senior receptionist would — but she's available at 11pm when a patient needs to rebook. That alone has changed how we operate.</p>
-      <div class="quote-author">
-        <div class="quote-avatar">DC</div>
-        <div>
-          <div class="quote-name">Dr D. Chopra</div>
-          <div class="quote-role">The London Dermatology Centre, Harley Street</div>
-        </div>
-      </div>
-    </div>
-    <div class="quote-card">
-      <div class="quote-mark">"</div>
-      <p class="quote-text">Our patients speak English, Arabic, Spanish, and Mandarin. Ava answers all of them. That's not something any of our previous tools could do — it simply wasn't possible before.</p>
-      <div class="quote-author">
-        <div class="quote-avatar">SK</div>
-        <div>
-          <div class="quote-name">Dr S. Khalique</div>
-          <div class="quote-role">Dr Sophia Khalique & Associates, 101 Harley Street</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 
 
